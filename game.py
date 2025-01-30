@@ -65,9 +65,9 @@ class Game:
         self.player = None
         self.locations = {
             "village": Location("Village", "A bustling village with shops and friendly NPCs.", ["forest", "home"]),
-            "forest": Location("Enchanted Forest", "A mystical forest filled with magical creatures.", ["village", "dark cave", "home"]),
-            "dark cave": Location("Dark Cave", "A dark and eerie cave with hidden treasures.", ["forest", "mountain pass"]),
-            "home": Location("Home", "The favourite Resting place", ["village", "forest"])
+            "forest": Location("Enchanted Forest", "A mystical forest filled with magical creatures.", ["village", "dark-cave"]),
+            "dark-cave": Location("Dark Cave", "A dark and eerie cave with hidden treasures.", ["forest"]),
+            "home": Location("Home", "The favourite Resting place", ["village"])
         }
         self.vendors = {
             "village": Vendor("Potion Master", [ITEMS["Health Potion"], ITEMS["Stamina Potion"], ITEMS["Iron Sword"]])
