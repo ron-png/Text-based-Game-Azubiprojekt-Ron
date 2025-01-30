@@ -98,7 +98,10 @@ class Game:
             elif command == 'inventory':
                 self.show_inventory()
             elif command == 'shop':
-                self.visit_shop()
+                if self.current_location.name == "village":
+                    self.visit_shop()
+                else:
+                    print("You can only access the shop in the village!")
             elif command.startswith('move '):
                 direction = command.split(' ')[1]
                 self.move(direction)
