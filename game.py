@@ -122,17 +122,17 @@ class Game:
             if direction == "home" and self.current_location.name.lower() != "village":
                 print("You can only access your home base from the village.")
             else:
-                # Check for 30% encounter chance in forest or dark-cave
-                if self.current_location.name in ["Enchanted Forest", "Dark Cave"]:
-                    if random.random() < 0.3:
-                        self.encounter()
-                if self.current_location.name in ["Village", "Home"]:
-                    if random.random() < 0.3:
-                        self.npc_encounter()
                 # Check stamina before allowing movement
                 if self.player.stamina >= 1:
+                    # Check for 30% encounter chance in forest or dark-cave
+                    if self.current_location.name in ["Enchanted Forest", "Dark Cave"]:
+                        if random.random() < 0.3:
+                            self.encounter()
+                    if self.current_location.name in ["Village", "Home"]:
+                        if random.random() < 0.3:
+                            self.npc_encounter()
                     self.current_location = self.locations[direction]
-                    self.player.stamina -= 1  # Deduct staminav
+                    self.player.stamina -= 1  # Deduct stamina
                     print(f"You move to the {self.current_location.name}. (-1 Stamina)")
                 else:
                     print("Not enough stamina to move!")
