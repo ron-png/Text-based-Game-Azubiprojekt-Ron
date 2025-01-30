@@ -122,15 +122,50 @@ class Game:
             if direction == "home" and self.current_location.name.lower() != "village":
                 print("You can only access your home base from the village.")
             else:
+                # Check for 30% encounter chance in forest or dark-cave
+                if self.current_location.name in ["Enchanted Forest", "Dark Cave"]:
+                    if random.random() < 0.3:
+                        self.encounter()
+                if self.current_location.name in ["Village", "Home"]:
+                    if random.random() < 0.3:
+                        self.npc_encounter()
                 # Check stamina before allowing movement
                 if self.player.stamina >= 1:
                     self.current_location = self.locations[direction]
-                    self.player.stamina -= 1  # Deduct stamina
+                    self.player.stamina -= 1  # Deduct staminav
                     print(f"You move to the {self.current_location.name}. (-1 Stamina)")
                 else:
                     print("Not enough stamina to move!")
         else:
             print("You can't go that way.")
+    
+    def npc_encounter(self):
+        npc = random.choice(["Beggar", "Beverage Trader"])
+        print(f"You encounter a {npc}!")
+        
+        if npc == "Beggar":
+            choice = input("The beggar asks for 1 gold to restore 1 stamina. Give? (yes/no): ").lower()
+            if choice == "yes":
+                if self.player.gold >= 1:
+                    self.player.gold -= 1
+                    self.player.stamina = min(self.player.max_stamina, self.player.stamina + 1)
+                    print("Stamina restored by 1!")
+                else:
+                    print("You don't have enough gold.")
+            else:
+                print("You ignore the beggar.")
+        elif npc == "Beverage Trader":
+            choice = input("The trader offers a random potion for 7 gold. Buy? (yes/no): ").lower()
+            if choice == "yes":
+                if self.player.gold >= 7:
+                    self.player.gold -= 7
+                    potion = "Health Potion" if random.random() < 0.7 else "Stamina Potion"
+                    self.player.inventory[potion] += 1
+                    print(f"You received a {potion}!")
+                else:
+                    print("You don't have enough gold.")
+            else:
+                print("You walk away from the trader.")
 
     def visit_shop(self):
         vendor = self.vendors["village"]
