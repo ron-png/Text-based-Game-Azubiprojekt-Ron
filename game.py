@@ -233,8 +233,9 @@ class Game:
                 print("You have been defeated! Game over.")
                 break
         if enemy.health <= 0:
-            print(f"You defeated the {enemy.name} and collected {enemy.gold_drop} gold!")
-            self.player.gold += enemy.gold_drop
+            goldnumber = enemy.gold_drop
+            print(f"You defeated the {enemy.name} and collected {goldnumber} gold!")
+            self.player.gold += goldnumber
         
         # Post-battle stamina cost
         self.player.stamina -= 3
