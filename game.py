@@ -54,7 +54,7 @@ class Vendor:
 
 # Game Items
 ITEMS = {
-    "Health Potion": Item("Health Potion", "Restores 20 HP", 15, "health"),
+    "Health Potion": Item("Health Potion", "Restores 20 HP", 20, "health"),
     "Stamina Potion": Item("Stamina Potion", "Restores 5 Stamina", 10, "stamina"),
     "Iron Sword": Item("Iron Sword", "+5 Attack Power", 50, "weapon"),
     "Mystery Key": Item("Myst ery Key", "Unlocks special areas", 25, "key")
@@ -65,10 +65,9 @@ class Game:
         self.player = None
         self.locations = {
             "village": Location("Village", "A bustling village with shops and friendly NPCs.", ["forest", "home"]),
-            "forest": Location("Enchanted Forest", "A mystical forest filled with magical creatures.", ["village", "dark cave"]),
+            "forest": Location("Enchanted Forest", "A mystical forest filled with magical creatures.", ["village", "dark cave", "home"]),
             "dark cave": Location("Dark Cave", "A dark and eerie cave with hidden treasures.", ["forest", "mountain pass"]),
-            "mountain pass": Location("Mountain Pass", "A treacherous path leading to the mountains.", ["dark cave", "abandoned temple"]),
-            "abandoned temple": Location("Abandoned Temple", "An ancient temple filled with secrets.", ["mountain pass"])
+            "home": Location("Home", "The favourite Resting place", ["village", "forest"])
         }
         self.vendors = {
             "village": Vendor("Potion Master", [ITEMS["Health Potion"], ITEMS["Stamina Potion"], ITEMS["Iron Sword"]])
@@ -88,6 +87,7 @@ class Game:
             print(f"Available exits: {', '.join(self.current_location.exits)}")
             print("Available commands: help, rest, inventory, move <location>, shop, quit")
             command = input("What do you want to do? ").strip().lower()
+            print("\n\n\n")
             if command == 'quit':
                 print("Thanks for playing!")
                 break
@@ -119,7 +119,7 @@ class Game:
 
     def move(self, direction):
         if direction in self.current_location.exits:
-            if direction == "home" and self.current_location.name != "village":
+            if direction == "home" and self.current_location.name.lower() != "village":
                 print("You can only access your home base from the village.")
             else:
                 # Check stamina before allowing movement
@@ -153,13 +153,13 @@ class Game:
             print("Invalid item.")
 
     def rest(self):
-        if self.current_location.name == "village":
-            print("You rest at your home base to recover stamina.")
-            self.player.stamina = min(self.player.max_stamina, self.player.stamina + 5)
+        if self.current_location.name == "Village" or self.current_location.name == "Home":
+            print("You rest at home and recover all stamina.")
+            self.player.stamina = self.player.max_stamina  # Full restore
         else:
-            print("You rest to recover stamina.")
-            self.player.stamina = min(self.player.max_stamina, self.player.stamina + 2)
-            if random.random() < 0.5:  # 50% chance of being attacked while resting
+            print("You rest to recover 3 stamina.")
+            self.player.stamina = min(self.player.max_stamina, self.player.stamina + 3)
+            if random.random() < 0.3:  # 50% attack chance remains
                 self.encounter()
 
     def show_inventory(self):
