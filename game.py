@@ -98,7 +98,7 @@ class Game:
             elif command == 'inventory':
                 self.show_inventory()
             elif command == 'shop':
-                if self.current_location.name == "village":
+                if self.current_location.name.lower() == "village":
                     self.visit_shop()
                 else:
                     print("You can only access the shop in the village!")
