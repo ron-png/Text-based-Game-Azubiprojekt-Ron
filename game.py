@@ -1,5 +1,4 @@
 import random
-import time
 
 class Player:
     def __init__(self, name):
@@ -113,13 +112,14 @@ class Game:
 
     def rest(self):
         if self.player.location == "home":
-            print("You rest to recover stamina.")
-            self.player.stamina = self.player.max_stamina
+            print("You rest at your home base to recover stamina.")
+            self.player.stamina = min(self.player.max_stamina, self.player.stamina + 5)
             self.player.moves = 0
+        else:
+            print("You rest to recover stamina.")
+            self.player.stamina = min(self.player.max_stamina, self.player.stamina + 2)
             if random.random() < 0.5:  # 50% chance of being attacked while resting
                 self.encounter()
-        else:
-            print("You can only rest at your home base.")
 
     def show_inventory(self):
         print("Your inventory:")
