@@ -122,8 +122,13 @@ class Game:
             if direction == "home" and self.current_location.name != "village":
                 print("You can only access your home base from the village.")
             else:
-                self.current_location = self.locations[direction]
-                print(f"You move to the {self.current_location.name}.")
+                # Check stamina before allowing movement
+                if self.player.stamina >= 1:
+                    self.current_location = self.locations[direction]
+                    self.player.stamina -= 1  # Deduct stamina
+                    print(f"You move to the {self.current_location.name}. (-1 Stamina)")
+                else:
+                    print("Not enough stamina to move!")
         else:
             print("You can't go that way.")
 
@@ -169,7 +174,8 @@ class Game:
         self.battle(enemy)
 
     def battle(self, enemy):
-        while enemy.health > 0 and self .player.health > 0:
+        # Fix typo: "self .player" -> "self.player"
+        while enemy.health > 0 and self.player.health > 0:
             action = input("Do you want to 'attack', 'use item', or 'flee'? ").strip().lower()
             if action == 'attack':
                 enemy.health -= self.player.attack_power
@@ -180,7 +186,7 @@ class Game:
             elif action == 'use item':
                 self.use_item()
             elif action == 'flee':
-                if random.random() < 0.5:  # 50% chance to flee
+                if random.random() < 0.5:
                     print("You successfully fled!")
                     break
                 else:
@@ -194,6 +200,10 @@ class Game:
         if enemy.health <= 0:
             print(f"You defeated the {enemy.name} and collected {enemy.gold_drop} gold!")
             self.player.gold += enemy.gold_drop
+        
+        # Post-battle stamina cost
+        self.player.stamina -= 3
+        print(f"After the intense battle, you lose 3 Stamina. Current Stamina: {self.player.stamina}")
 
     def use_item(self):
         item = input("Which item do you want to use? ").strip()
